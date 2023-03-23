@@ -19,7 +19,7 @@ function initiateRouter(app) {
     app.use(`${prefix}/messages`, new MessageRoutes().router);
     app.use(`${prefix}/user`, new UserRoutes().router);
     app.use(`${prefix}/auth`, new AuthRoutes().router);
-    app.use(`${prefix}/klusjes`, new KlusjesRoutes().router);
+    app.use(`${prefix}/klusje`, new KlusjesRoutes().router);
 
 }
 module.exports = {

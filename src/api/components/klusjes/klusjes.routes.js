@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { KlusjesController } = require("./message.controller");
+const { KlusjesController } = require("./klusjes.controller");
 
 class KlusjesRoutes {
     controller = new KlusjesController();
@@ -11,10 +11,10 @@ class KlusjesRoutes {
 
     initRoutes() {
         this.router.get("/", this.controller.getKlusjes);
-        this.router.get("/:id", this.controller.getKlusjesByID);
-        this.router.post("/", this.controller.createKlusjes);
-        this.router.put("/:id", this.controller.updateKlusjes);
-        this.router.delete("/:id", this.controller.deleteKlusjes);
+        this.router.get("/:id", this.controller.getKlusjeByID);
+        this.router.post("/", this.controller.createKlusje);
+        this.router.put("/:id", this.controller.updateKlusje);
+        this.router.delete("/:id", this.controller.deleteKlusje);
     }
 }
 
