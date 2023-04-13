@@ -7,7 +7,7 @@ const Role = require("./src/api/components/role/role.model");
 require("./src/api/components/user/user.model");
 
 const app = express();
-const port = 3000;
+const port = 27017;
 
 if (process.env.NODE_ENV == "production") {
     console.log("%cProduction environment detected", "color: green");
