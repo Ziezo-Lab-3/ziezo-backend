@@ -8,14 +8,13 @@ var bcrypt = require("bcryptjs");
 class AuthController {
     signup(req, res) {
         const user = new User({
-            username: req.body.username,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 8),
         });
 
         user.save((err, user) => {
             if (err) {
-                res.status(500).json(new ApiResult("error", null, err));
+                res.status(500).json(new ApiResult("error", err));
                 return;
             }
 
@@ -26,38 +25,36 @@ class AuthController {
                     },
                     (err, roles) => {
                         if (err) {
-                            res.status(500).json(new ApiResult("error", null, err));
+                            res.status(500).json(new ApiResult("error", err));
                             return;
                         }
 
                         user.roles = roles.map((role) => role._id);
                         user.save((err) => {
                             if (err) {
-                                res.status(500).json(new ApiResult("error", null, err));
+                                res.status(500).json(new ApiResult("error", err));
                                 return;
                             }
 
-                            res.send({
-                                message: "Gebruiker is geregistreerd.",
-                            });
+                            res.send(new ApiResult("success", user));
                         });
                     }
                 );
             } else {
                 Role.findOne({ name: "user" }, (err, role) => {
                     if (err) {
-                        res.status(500).json(new ApiResult("error", null, err));
+                        res.status(500).json(new ApiResult("error", err));
                         return;
                     }
 
                     user.roles = [role._id];
                     user.save((err) => {
                         if (err) {
-                            res.status(500).json(new ApiResult("error", null, err));
+                            res.status(500).json(new ApiResult("error", err));
                             return;
                         }
 
-                        res.send(new ApiResult("success", null, null));
+                        res.send(new ApiResult("success", user));
                     });
                 });
             }
@@ -65,16 +62,17 @@ class AuthController {
     }
 
     signin(req, res) {
+        console.log({body: req.body});
         User.findOne({
-            username: req.body.username,
+            email: req.body.email,
         })
             .populate("roles", "-__v")
             .exec((err, user) => {
                 if (err) {
-                    res.status(500).json(new ApiResult("error", null, err));
+                    res.status(500).json(new ApiResult("error", err));
                     return;
                 }
-
+                console.log({user: user});
                 if (!user) {
                     return res.status(404).json(new ApiResult("fail", null, "Je email of wachtwoord is fout."));
                 }
@@ -101,7 +99,7 @@ class AuthController {
                 }
                 res.status(200).json(new ApiResult("success", {
                     id: user._id,
-                    username: user.username,
+                    name: user.name_first + " " + user.name_last,
                     email: user.email,
                     roles: authorities,
                     accessToken: token,
