@@ -44,8 +44,8 @@ database.once("connected", () => {
             }).save((err) => logRole(err, "user"));
 
             new Role({
-                name: "employee",
-            }).save((err) => logRole(err, "employee"));
+                name: "helper",
+            }).save((err) => logRole(err, "helper"));
 
             new Role({
                 name: "moderator",

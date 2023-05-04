@@ -11,8 +11,11 @@ class KlusjesController {
             }
         });
     }
+    
     getKlusjes(req, res) {
-        Klusje.find(req.query, (error, data) => {
+        console.log(req.query);
+        const filter = JSON.parse(req.query.filter);
+        Klusje.find(filter, (error, data) => {
             if (error) {
                 res.status(500).send(new ApiResult("error", null, error));
             } else {
