@@ -25,11 +25,16 @@ class KlusjesController {
     }
     async createKlusje(req, res) {
         try {
+            console.log(req.body);
             const data = new Klusje({
                 name: req.body.name,
                 description: req.body.description,
                 price: req.body.price,
-                image: req.body.image,
+                address: req.body.address,
+                category: req.body.category,
+                state: req.body.state,
+                images: req.body.images,
+                user: req.body.user,
             });
             const savedData = await data.save();
             res.status(200).json(new ApiResult("success", savedData));

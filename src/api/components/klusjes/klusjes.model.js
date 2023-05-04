@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
         category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
         images: { type: [], required: true },
         state: { type: String, required: true, enum: ['open', 'in progress', 'awaiting payment', 'done', 'cancelled'] },
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
         helper: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     }, { timestamps: true });
 
