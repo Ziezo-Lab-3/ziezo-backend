@@ -34,7 +34,6 @@ class KlusjesController {
                 res.status(400).send(warning);
                 return;
             }
-            let totalDocCount = 0;
             // return all documents that match the filter (limited by first and last)
             if (req.query.first && req.query.last) {
                 const first = parseInt(req.query.first);
@@ -48,15 +47,24 @@ class KlusjesController {
                     res.status(400).send(warning);
                     return;
                 }
-                const data = await Klusje.find(filter)
-                    .skip(first)
-                    .limit(last - first + 1)
-                    .exec();
+                let data = await Klusje.aggregate([
+                    {
+                        $facet: {
+                            totalDocumentCount: [{ $count: "count" }],
+                            items: [
+                                { $sort: { createdAt: -1 } },
+                                { $skip: first },
+                                { $limit: last - first + 1 },
+                            ],
+                        },
+                    },
+                ]);
+                data = data[0];
                 res.status(200).json(
                     new ApiResult(
                         "success",
-                        data,
-                        `totalDocumentCount: ${totalDocCount}`
+                        data.items,
+                        `TotalDocumentCount: ${data.totalDocumentCount[0].count}`
                     )
                 );
             } else {
@@ -78,6 +86,23 @@ class KlusjesController {
             res.status(500).send(new ApiResult("error", error.message));
         }
     }
+    async countKlusjes(req, res) {
+        try {
+            const filter = JSON.parse(req.query.filter);
+            Klusje.countDocuments(filter, (error, totalDocCount) => {
+                if (error) {
+                    res.status(500).send(new ApiResult("error", error));
+                } else {
+                    res.status(200).json(
+                        new ApiResult("success", { count: totalDocCount })
+                    );
+                }
+            });
+        } catch (error) {
+            res.status(500).send(new ApiResult("error", error));
+        }
+    }
+
     async createKlusje(req, res) {
         try {
             const data = new Klusje({
