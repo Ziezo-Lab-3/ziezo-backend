@@ -7,17 +7,6 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     User.findOne({
         username: req.body.username,
     }).exec((err, user) => {
-        if (err) {
-            res.status(500).send(new ApiResult("error", err));
-            return;
-        }
-
-        if (user) {
-            res.status(400).send(new ApiResult("error", "Account could not be created."));
-            return;
-        }
-
-        // Email
         User.findOne({
             email: req.body.email,
         }).exec((err, user) => {
@@ -27,7 +16,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
             }
 
             if (user) {
-                res.status(400).send(new ApiResult("error", "Account could not be created."));
+                res.status(400).send(new ApiResult("fail", null, "Je account kon niet worden aangemaakt. Kijk na of je al een account hebt, of probeer het later nog eens."));
                 return;
             }
 
