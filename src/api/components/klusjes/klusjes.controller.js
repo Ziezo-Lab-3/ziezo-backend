@@ -20,6 +20,10 @@ class KlusjesController {
                 // cast to ObjectId
                 filter.user = mongoose.Types.ObjectId(filter.user);
             }
+            if (filter.category) {
+                // cast to ObjectId
+                filter.category = mongoose.Types.ObjectId(filter.category);
+            }
 
             // verify that first and last are both provided or both not provided
             if (req.query.first && !req.query.last) {
