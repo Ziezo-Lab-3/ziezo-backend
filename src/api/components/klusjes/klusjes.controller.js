@@ -1,5 +1,6 @@
 const Klusje = require("./klusjes.model");
 const { ApiResult } = require("../../JSend");
+const mongoose = require("mongoose");
 
 class KlusjesController {
     getKlusjeByID(req, res) {
@@ -15,6 +16,10 @@ class KlusjesController {
     async getKlusjes(req, res) {
         try {
             const filter = JSON.parse(req.query.filter);
+            if (filter.user) {
+                // cast to ObjectId
+                filter.user = mongoose.Types.ObjectId(filter.user);
+            }
 
             // verify that first and last are both provided or both not provided
             if (req.query.first && !req.query.last) {
@@ -48,6 +53,7 @@ class KlusjesController {
                     return;
                 }
                 let data = await Klusje.aggregate([
+                    { $match: filter },
                     {
                         $facet: {
                             totalDocumentCount: [{ $count: "count" }],
@@ -59,12 +65,18 @@ class KlusjesController {
                         },
                     },
                 ]);
-                data = data[0];
+
+                const totalDocumentCount =
+                    data[0].totalDocumentCount.length > 0
+                        ? data[0].totalDocumentCount[0].count
+                        : 0;
+                const items = data[0].items;
+
                 res.status(200).json(
                     new ApiResult(
                         "success",
-                        data.items,
-                        `TotalDocumentCount: ${data.totalDocumentCount[0].count}`
+                        items,
+                        `totalDocumentCount: ${totalDocumentCount}`
                     )
                 );
             } else {
@@ -74,10 +86,7 @@ class KlusjesController {
                         res.status(500).send(new ApiResult("error", error));
                     } else {
                         res.status(200).json(
-                            new ApiResult(
-                                "success",
-                                `totalDocumentCount: ${totalDocCount}`
-                            )
+                            new ApiResult( "success", data, `totalDocumentCount: ${data.length}`)
                         );
                     }
                 });
