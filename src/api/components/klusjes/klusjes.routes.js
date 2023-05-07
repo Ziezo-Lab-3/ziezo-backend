@@ -11,6 +11,7 @@ class KlusjesRoutes {
 
     initRoutes() {
         this.router.get("/", this.controller.getKlusjes);
+        this.router.get("/count", this.controller.getKlusjesCount);
         this.router.get("/:id", this.controller.getKlusjeByID);
         this.router.post("/", this.controller.createKlusje);
         this.router.put("/:id", this.controller.updateKlusje);
