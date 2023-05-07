@@ -86,7 +86,7 @@ class KlusjesController {
             res.status(500).send(new ApiResult("error", error.message));
         }
     }
-    async countKlusjes(req, res) {
+    async getKlusjesCount(req, res) {
         try {
             const filter = JSON.parse(req.query.filter);
             Klusje.countDocuments(filter, (error, totalDocCount) => {
