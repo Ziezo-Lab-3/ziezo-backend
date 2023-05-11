@@ -15,7 +15,11 @@ class KlusjesController {
 
     async getKlusjes(req, res) {
         try {
-            const filter = JSON.parse(req.query.filter);
+            let filter = {};
+            if (req.query.filter) {
+                filter = JSON.parse(req.query.filter);
+            }
+
             if (filter.user) {
                 // cast to ObjectId
                 filter.user = mongoose.Types.ObjectId(filter.user);
