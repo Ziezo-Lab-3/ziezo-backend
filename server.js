@@ -21,6 +21,7 @@ if (!process.env.MONGO_URI) {
 }
 
 // Set up mongoose
+mongoose.set("strictQuery", true);
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
