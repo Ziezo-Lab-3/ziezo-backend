@@ -1,4 +1,6 @@
 const ChatGroup = require("./chatgroup.model");
+const User = require("../user/user.model");
+const Message = require("../message/message.model");
 const { ApiResult } = require("../../JSend");
 const jwt = require("jsonwebtoken");
 
@@ -24,11 +26,26 @@ class ChatGroupController {
 
         // get all chatgroups where the user is a member (chatgroup.members is an array)
         ChatGroup.find({ members: user }, (error, data) => {
-            if (error) {
-                res.status(500).send(new ApiResult("error", null, error));
-            } else {
-                res.status(200).json(new ApiResult("success", data));
-            }
+            // populate lastMessage for each chatgroup
+            Message.populate(data, { path: "lastMessage" }, (error, data) => {
+                // populate the members array with the user data
+                User.populate(data, { path: "members" }, (error, data) => {
+                    // generate name for each chatgroup
+                    data.forEach((chatgroup) => {
+                        if (chatgroup.name != null) return;
+                        // remove the user from the members array
+                        const members = chatgroup.members.filter((member) => member._id != user);
+                        console.log(members);
+                        // generate the name
+                        chatgroup.name = members.map((member) => member.name).join(", ");
+                    });
+                    if (error) {
+                        res.status(500).send(new ApiResult("error", null, error));
+                    } else {
+                        res.status(200).json(new ApiResult("success", data));
+                    }
+                });
+            });
         });
     }
     async createChatGroup(req, res) {

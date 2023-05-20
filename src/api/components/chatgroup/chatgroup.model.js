@@ -13,6 +13,14 @@ const dataSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    job: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job'
+    },
+    lastMessage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('ChatGroup', dataSchema)
