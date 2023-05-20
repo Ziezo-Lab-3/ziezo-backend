@@ -18,6 +18,10 @@ class ChatGroupController {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = decoded.id;
 
+        // TODO: paging for virtual scrolling
+        // TODO: sort by last message date
+        // TODO: expand with last message & last message date & unread messages count
+
         // get all chatgroups where the user is a member (chatgroup.members is an array)
         ChatGroup.find({ members: user }, (error, data) => {
             if (error) {
@@ -26,14 +30,6 @@ class ChatGroupController {
                 res.status(200).json(new ApiResult("success", data));
             }
         });
-
-        // ChatGroup.find(req.query, (error, data) => {
-        //     if (error) {
-        //         res.status(500).send(new ApiResult("error", null, error));
-        //     } else {
-        //         res.status(200).json(new ApiResult("success", data));
-        //     }
-        // });
     }
     async createChatGroup(req, res) {
         try {
