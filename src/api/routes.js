@@ -6,6 +6,7 @@ let { AuthRoutes } = require("./components/auth/auth.routes");
 let { KlusjesRoutes } = require("./components/klusjes/klusjes.routes");
 let { CategoryRoutes } = require("./components/category/category.routes");
 let { ChatGroupRoutes } = require("./components/chatgroup/chatgroup.routes");
+
 /**
  * Init Express REST routes
  *
@@ -20,7 +21,7 @@ function initiateRouter(app) {
     });
     app.get(prefix, (req, res) => res.send("PING"));
 
-    app.use(`${prefix}/messages`, new MessageRoutes().router);
+    app.use(`${prefix}/message`, new MessageRoutes().router);
     app.use(`${prefix}/user`, new UserRoutes().router);
     app.use(`${prefix}/auth`, new AuthRoutes().router);
     app.use(`${prefix}/klusje`, new KlusjesRoutes().router);
