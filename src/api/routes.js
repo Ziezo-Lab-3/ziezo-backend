@@ -21,11 +21,11 @@ function initiateRouter(app) {
     });
     app.get(prefix, (req, res) => res.send("PING"));
 
-    app.use(`${prefix}/message`, new MessageRoutes().router);
-    app.use(`${prefix}/user`, new UserRoutes().router);
     app.use(`${prefix}/auth`, new AuthRoutes().router);
-    app.use(`${prefix}/klusje`, new KlusjesRoutes().router);
-    app.use(`${prefix}/category`, new CategoryRoutes().router);
+    app.use(`${prefix}/message`, verifyToken, new MessageRoutes().router);
+    app.use(`${prefix}/user`, verifyToken, new UserRoutes().router);
+    app.use(`${prefix}/klusje`, verifyToken, new KlusjesRoutes().router);
+    app.use(`${prefix}/category`, verifyToken, new CategoryRoutes().router);
     app.use(`${prefix}/chatgroup`, verifyToken, new ChatGroupRoutes().router);
 }
 module.exports = {
