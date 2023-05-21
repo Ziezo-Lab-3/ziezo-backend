@@ -5,8 +5,8 @@
  * @returns {[number, number]} first and last
  */
 const verifyPagingParameters = (pFirst, pLast) => {
-    const first = parseInt(pFirst);
-    const last = parseInt(pLast);
+    const first = parseInt(pFirst) | 0;
+    const last = parseInt(pLast) | 9;
     if (first < 0 || last < 0) {
         throw new Error(
             "first and last parameters must be greater than or equal to 0"

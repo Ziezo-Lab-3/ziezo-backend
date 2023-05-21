@@ -35,7 +35,6 @@ class ChatGroupController {
                         if (chatgroup.name != null) return;
                         // remove the user from the members array
                         const members = chatgroup.members.filter((member) => member._id != user);
-                        console.log(members);
                         // generate the name
                         chatgroup.name = members.map((member) => member.name).join(", ");
                     });

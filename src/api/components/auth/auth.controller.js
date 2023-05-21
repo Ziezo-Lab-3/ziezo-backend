@@ -62,7 +62,6 @@ class AuthController {
     }
 
     signin(req, res) {
-        console.log({body: req.body});
         User.findOne({
             email: req.body.email,
         })
@@ -72,7 +71,6 @@ class AuthController {
                     res.status(500).json(new ApiResult("error", err));
                     return;
                 }
-                console.log({user: user});
                 if (!user) {
                     return res.status(404).json(new ApiResult("fail", null, "Je email of wachtwoord is fout."));
                 }
