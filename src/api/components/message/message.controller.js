@@ -54,8 +54,9 @@ class MessageController {
     async createMessage(req, res) {
         try {
             const data = new Message({
-                user: req.body.user,
+                sender: req.body.sender,
                 message: req.body.message,
+                chatGroup: req.body.chatGroup,
             });
             const savedData = await data.save();
             res.status(200).json(new ApiResult("success", savedData));
