@@ -1,20 +1,14 @@
 const mongoose = require('mongoose');
 
 const dataSchema = new mongoose.Schema({
-    sender: {
+    user: {
         required: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String
     },
     message: {
         required: true,
         type: String
-    },
-    chatGroup: {
-        required: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChatGroup'
-    },
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Message', dataSchema)
