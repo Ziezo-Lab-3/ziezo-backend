@@ -36,7 +36,9 @@ class ChatGroupController {
                         // remove the user from the members array
                         const members = chatgroup.members.filter((member) => member._id != user);
                         // generate the name
-                        chatgroup.name = members.map((member) => member.name).join(", ");
+                        chatgroup.name = members.map((member) => `${member.name_first} ${member.name_last}`).join(", ");
+                        if (members.length === 1)
+                            chatgroup.picture = members[0].avatar;
                     });
                     if (error) {
                         res.status(500).send(new ApiResult("error", null, error));
