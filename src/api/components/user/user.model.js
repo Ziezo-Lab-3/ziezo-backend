@@ -10,19 +10,6 @@ const User = new mongoose.Schema(
             type: String,
             required: true,
         },
-        phone: {
-            type: String,
-            required: true,
-        },
-        gender: {
-            type: String,
-            required: true,
-            enum: [ 'm', 'f', 'x']
-        },
-        date_birth: {
-            type: Date,
-            required: true,
-        },
         name_first: {
             type: String,
             required: true,
@@ -30,6 +17,20 @@ const User = new mongoose.Schema(
         name_last: {
             type: String,
             required: true,
+        },
+
+        phone: {
+            type: String,
+        },
+        gender: {
+            type: String,
+            enum: [ 'm', 'f', 'x']
+        },
+        date_birth: {
+            type: Date,
+        },
+        avatar: {
+            type: String,
         },
 
         address_number: {
@@ -48,10 +49,6 @@ const User = new mongoose.Schema(
             type: String,
         },
         address_country: {
-            type: String,
-        },
-        
-        avatar: {
             type: String,
         },
 
