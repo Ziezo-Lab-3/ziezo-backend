@@ -2,29 +2,56 @@ const mongoose = require("mongoose");
 
 const User = new mongoose.Schema(
     {
-        email: String,
-        password: String,
-        phone: String,
-
-        gender: String,
-        date_birth: Date,
-
-        name_first: String,
-        name_last: String,
-        name: {
+        email: {
             type: String,
-            default: function () {
-                return this.name_first + " " + this.name_last;
-            },
+            required: true,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+        name_first: {
+            type: String,
+            required: true,
+        },
+        name_last: {
+            type: String,
+            required: true,
         },
 
-        address_number: String,
-        address_street: String,
-        address_city: String,
-        address_state: String,
-        address_zip: String,
-        address_country: String,
-        
+        phone: {
+            type: String,
+        },
+        gender: {
+            type: String,
+            enum: [ 'm', 'f', 'x']
+        },
+        date_birth: {
+            type: Date,
+        },
+        avatar: {
+            type: String,
+        },
+
+        address_number: {
+            type: String,
+        },
+        address_street: {
+            type: String,
+        },
+        address_city: {
+            type: String,
+        },
+        address_state: {
+            type: String,
+        },
+        address_zip: {
+            type: String,
+        },
+        address_country: {
+            type: String,
+        },
+
         roles: [
             {
                 type: mongoose.Schema.Types.ObjectId,

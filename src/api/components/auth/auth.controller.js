@@ -100,6 +100,9 @@ class AuthController {
                     name: user.name_first + " " + user.name_last,
                     email: user.email,
                     roles: authorities,
+                    avatar: user.avatar,
+                    firstName: user.name_first,
+                    lastName: user.name_last,
                     accessToken: token,
                 }));
             });
