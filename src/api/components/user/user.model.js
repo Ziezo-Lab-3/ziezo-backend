@@ -51,6 +51,10 @@ const User = new mongoose.Schema(
         address_country: {
             type: String,
         },
+        pro: {
+            type: Boolean,
+            default: false,
+        },
 
         roles: [
             {
