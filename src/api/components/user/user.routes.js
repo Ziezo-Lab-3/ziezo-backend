@@ -12,6 +12,7 @@ class UserRoutes {
 
     initRoutes() {
         this.router.get('/token', [verifyToken], this.controller.getUserByToken);
+        this.router.get('/:id', [verifyToken], this.controller.getUserByID);
         this.router.get("/test/public", this.controller.allAccess);
         this.router.get("/test/user", [verifyToken], this.controller.userBoard);
         this.router.get("/test/mod", [verifyToken, isModerator], this.controller.moderatorBoard);
