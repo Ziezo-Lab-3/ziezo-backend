@@ -8,13 +8,25 @@ class UserController {
         const user = req;
         const token = user.headers["x-access-token"];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
+
         User.findById(decoded.id)
             .populate("roles")
             .then((user) => {
                 if (!user) {
                     return res.status(404).send({ message: "User Not found." });
-                }                
+                }
+                user.password = undefined;
+                res.status(200).send(new ApiResult("success", user));
+            });
+    }
+
+    getUserByID(req, res) {
+        User.findById(req.params.id)
+            .populate("roles")
+            .then((user) => {
+                if (!user) {
+                    return res.status(404).send({ message: "User Not found." });
+                }
                 user.password = undefined;
                 res.status(200).send(new ApiResult("success", user));
             });

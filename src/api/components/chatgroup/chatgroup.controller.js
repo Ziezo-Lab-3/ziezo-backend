@@ -56,8 +56,16 @@ class ChatGroupController {
                 picture: req.body.picture,
                 members: req.body.members,
             });
+
+            // Verify the same members are not already in a chatgroup with the same length
+            const chatgroups = await ChatGroup.find({ members: { $all: data.members } });
+            const match = chatgroups.find((chatgroup) => chatgroup.members.length === data.members.length);
+            if (match) {
+                res.status(200).json(new ApiResult("success", match, "ChatGroup already exists, returning existing resource"));
+                return;
+            }
             const savedData = await data.save();
-            res.status(200).json(new ApiResult("success", savedData));
+            res.status(201).json(new ApiResult("success", savedData));
         } catch (error) {
             res.status(500).send(new ApiResult("error", null, error));
         }
