@@ -6,6 +6,7 @@ let { AuthRoutes } = require("./components/auth/auth.routes");
 let { KlusjesRoutes } = require("./components/klusjes/klusjes.routes");
 let { CategoryRoutes } = require("./components/category/category.routes");
 let { ChatGroupRoutes } = require("./components/chatgroup/chatgroup.routes");
+let { ProfileRoutes } = require("./components/profile/profile.routes");
 
 /**
  * Init Express REST routes
@@ -27,6 +28,7 @@ function initiateRouter(app) {
     app.use(`${prefix}/klusje`, verifyToken, new KlusjesRoutes().router);
     app.use(`${prefix}/category`, verifyToken, new CategoryRoutes().router);
     app.use(`${prefix}/chatgroup`, verifyToken, new ChatGroupRoutes().router);
+    app.use(`${prefix}/profile`, verifyToken, new ProfileRoutes().router);
 }
 module.exports = {
     initiateRouter,
