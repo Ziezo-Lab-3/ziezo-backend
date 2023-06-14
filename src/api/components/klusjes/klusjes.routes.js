@@ -15,7 +15,7 @@ class KlusjesRoutes {
         this.router.get("/:id", this.controller.getKlusjeByID);
 
         this.router.post("/", this.controller.createKlusje);
-        this.router.post("/:id/candidates", this.controller.addCandidate);
+        this.router.post("/:id/candidates/:userId", this.controller.addCandidate);
         
         this.router.put("/:id", this.controller.updateKlusje);
         

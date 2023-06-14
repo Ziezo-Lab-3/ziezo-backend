@@ -177,13 +177,27 @@ class KlusjesController {
     async addCandidate(req, res) {
         try {
             const id = req.params.id;
-            const candidate = req.body.candidate;
-            const updatedData = await Klusje.findByIdAndUpdate(
-                id,
-                { $push: { candidates: candidate } },
-                { new: true }
-            );
-            res.status(200).json(new ApiResult("success", updatedData));
+            const candidate = req.params.userId;
+            // check if candidates array exists
+            Klusje.findById(id, (error, data) => {
+                if (error) {
+                    res.status(500).send(new ApiResult("error", error));
+                } else {
+                    if (!data.candidates) {
+                        data.candidates = [];
+                    }
+                    // check if candidate is already in candidates array
+                    if (data.candidates.includes(candidate)) {
+                        res.status(200).json(
+                            new ApiResult("success", data, "candidate already exists")
+                        );
+                    } else {
+                        data.candidates.push(candidate);
+                        data.save();
+                        res.status(200).json(new ApiResult("success", data));
+                    }
+                }
+            });
         } catch (error) {
             res.status(500).send(new ApiResult("error", error));
         }
