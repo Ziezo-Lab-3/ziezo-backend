@@ -20,6 +20,16 @@ class ProfileController {
             }
         });
     }
+    getProfileByUserID(req, res) {
+        Profile.findOne({ user: req.params.id }, (error, data) => {
+            if (error) {
+                res.status(500).send(new ApiResult("error", null, error));
+            } else {
+                res.status(200).json(new ApiResult("success", data));
+            }
+        });
+    }
+
     postProfile(req, res) {
         Profile.create(req.body, (error, data) => {
             if (error) {

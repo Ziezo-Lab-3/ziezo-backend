@@ -12,6 +12,7 @@ class ProfileRoutes {
     initRoutes() {
         this.router.get("/", this.controller.getProfiles);
         this.router.get("/:id", this.controller.getProfileByID);
+        this.router.get("/user/:id", this.controller.getProfileByUserID);
         this.router.post("/", this.controller.postProfile);
     }
 }
