@@ -13,8 +13,12 @@ class KlusjesRoutes {
         this.router.get("/", this.controller.getKlusjes);
         this.router.get("/count", this.controller.getKlusjesCount);
         this.router.get("/:id", this.controller.getKlusjeByID);
+
         this.router.post("/", this.controller.createKlusje);
+        this.router.post("/:id/candidates", this.controller.addCandidate);
+        
         this.router.put("/:id", this.controller.updateKlusje);
+        
         this.router.delete("/:id", this.controller.deleteKlusje);
     }
 }
