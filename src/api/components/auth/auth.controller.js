@@ -10,6 +10,8 @@ class AuthController {
         const user = new User({
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 8),
+            name_first: req.body.firstName,
+            name_last: req.body.lastName,
         });
 
         user.save((err, user) => {
