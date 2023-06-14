@@ -28,6 +28,20 @@ class KlusjesController {
                 // cast to ObjectId
                 filter.category = mongoose.Types.ObjectId(filter.category);
             }
+            if (filter.candidates) {
+                if (Array.isArray(filter.candidates)) {
+                    // cast all elements to ObjectId
+                    filter.candidates = filter.candidates.map((candidate) =>
+                        mongoose.Types.ObjectId(candidate)
+                    );
+                } 
+                else {
+                    // cast to ObjectId
+                    filter.candidates = mongoose.Types.ObjectId(
+                        filter.candidates
+                    );
+                } 
+            }
 
             // verify that first and last are both provided or both not provided
             if (req.query.first && !req.query.last) {
