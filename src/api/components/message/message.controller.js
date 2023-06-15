@@ -57,6 +57,7 @@ class MessageController {
                 sender: req.body.sender,
                 message: req.body.message,
                 chatGroup: req.body.chatGroup,
+                html: req.body.html,
             });
             const savedData = await data.save();
             res.status(200).json(new ApiResult("success", savedData));

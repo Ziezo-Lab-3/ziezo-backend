@@ -54,7 +54,7 @@ class ChatGroupController {
             const data = new ChatGroup({
                 name: req.body.name,
                 picture: req.body.picture,
-                members: req.body.members,
+                members: req.body.users,
             });
 
             // Verify the same members are not already in a chatgroup with the same length
@@ -64,6 +64,11 @@ class ChatGroupController {
                 res.status(200).json(new ApiResult("success", match, "ChatGroup already exists, returning existing resource"));
                 return;
             }
+            if (data.members.length < 2) {
+                res.status(400).json(new ApiResult("error", null, "ChatGroup must have at least 2 members"));
+                return;
+            }
+
             const savedData = await data.save();
             res.status(201).json(new ApiResult("success", savedData));
         } catch (error) {

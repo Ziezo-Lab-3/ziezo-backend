@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
         state: { type: String, required: true, enum: ['open', 'in progress', 'awaiting payment', 'done', 'cancelled'] },
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
         helper: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     }, { timestamps: true });
 
 module.exports = mongoose.model('Klusje', klusjeSchema);

@@ -28,6 +28,20 @@ class KlusjesController {
                 // cast to ObjectId
                 filter.category = mongoose.Types.ObjectId(filter.category);
             }
+            if (filter.candidates) {
+                if (Array.isArray(filter.candidates)) {
+                    // cast all elements to ObjectId
+                    filter.candidates = filter.candidates.map((candidate) =>
+                        mongoose.Types.ObjectId(candidate)
+                    );
+                } 
+                else {
+                    // cast to ObjectId
+                    filter.candidates = mongoose.Types.ObjectId(
+                        filter.candidates
+                    );
+                } 
+            }
 
             // verify that first and last are both provided or both not provided
             if (req.query.first && !req.query.last) {
@@ -74,6 +88,13 @@ class KlusjesController {
                     },
                 ]);
 
+                // add empty candidates array to each klusje where candidates is null
+                data[0].items.forEach((klusje) => {
+                    if (!klusje.candidates) {
+                        klusje.candidates = [];
+                    }
+                });
+
                 const totalDocumentCount =
                     data[0].totalDocumentCount.length > 0
                         ? data[0].totalDocumentCount[0].count
@@ -103,6 +124,7 @@ class KlusjesController {
             res.status(500).send(new ApiResult("error", error.message));
         }
     }
+
     async getKlusjesCount(req, res) {
         try {
             const filter = JSON.parse(req.query.filter);
@@ -131,6 +153,7 @@ class KlusjesController {
                 state: req.body.state,
                 images: req.body.images,
                 user: req.body.user,
+                candidates: req.body.candidates || [],
             });
             const savedData = await data.save();
             res.status(200).json(new ApiResult("success", savedData));
@@ -138,6 +161,7 @@ class KlusjesController {
             res.status(500).send(new ApiResult("error", error));
         }
     }
+    
     async updateKlusje(req, res) {
         try {
             const id = req.params.id;
@@ -153,11 +177,41 @@ class KlusjesController {
             res.status(500).send(new ApiResult("error", error));
         }
     }
+
     async deleteKlusje(req, res) {
         try {
             const id = req.params.id;
             const deletedData = await Klusje.findByIdAndDelete(id);
             res.status(200).json(new ApiResult("success", deletedData));
+        } catch (error) {
+            res.status(500).send(new ApiResult("error", error));
+        }
+    }
+
+    async addCandidate(req, res) {
+        try {
+            const id = req.params.id;
+            const candidate = req.params.userId;
+            // check if candidates array exists
+            Klusje.findById(id, (error, data) => {
+                if (error) {
+                    res.status(500).send(new ApiResult("error", error));
+                } else {
+                    if (!data.candidates) {
+                        data.candidates = [];
+                    }
+                    // check if candidate is already in candidates array
+                    if (data.candidates.includes(candidate)) {
+                        res.status(200).json(
+                            new ApiResult("success", data, "candidate already exists")
+                        );
+                    } else {
+                        data.candidates.push(candidate);
+                        data.save();
+                        res.status(200).json(new ApiResult("success", data));
+                    }
+                }
+            });
         } catch (error) {
             res.status(500).send(new ApiResult("error", error));
         }
