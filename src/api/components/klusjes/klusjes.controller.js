@@ -1,5 +1,6 @@
 const Klusje = require("./klusjes.model");
 const { ApiResult } = require("../../JSend");
+const { parseFilterIds } = require("../../../js/mongooseHelper");
 const mongoose = require("mongoose");
 
 class KlusjesController {
@@ -15,34 +16,14 @@ class KlusjesController {
 
     async getKlusjes(req, res) {
         try {
-            let filter = {};
+            let filter =    {};
             if (req.query.filter) {
                 filter = JSON.parse(req.query.filter);
             }
 
-            if (filter.user) {
-                // cast to ObjectId
-                filter.user = mongoose.Types.ObjectId(filter.user);
-            }
-            if (filter.category) {
-                // cast to ObjectId
-                filter.category = mongoose.Types.ObjectId(filter.category);
-            }
-            if (filter.candidates) {
-                if (Array.isArray(filter.candidates)) {
-                    // cast all elements to ObjectId
-                    filter.candidates = filter.candidates.map((candidate) =>
-                        mongoose.Types.ObjectId(candidate)
-                    );
-                } 
-                else {
-                    // cast to ObjectId
-                    filter.candidates = mongoose.Types.ObjectId(
-                        filter.candidates
-                    );
-                } 
-            }
-
+            // cast all properties to ObjectId if necessary
+            filter = parseFilterIds(filter, ["user", "category", "helper", "candidates"]);
+            
             // verify that first and last are both provided or both not provided
             if (req.query.first && !req.query.last) {
                 let warning = new ApiResult(
